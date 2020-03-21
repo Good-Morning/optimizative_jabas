@@ -10,7 +10,7 @@ from scipy.special import expit
 from sklearn import datasets
 from sklearn.model_selection import train_test_split
 from sympy import *
-import mo.hw1.task1 as t1
+import task1 as t1
 
 
 def get_name(method):

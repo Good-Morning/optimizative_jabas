@@ -1,4 +1,4 @@
-import mo.hw1.task1 as t1
+import task1 as t1
 from functools import partial
 from itertools import zip_longest
 

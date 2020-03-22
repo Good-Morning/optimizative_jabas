@@ -53,7 +53,6 @@ def number_of_iters(cond, n_vars, step_chooser=t1.dichotomy, n_checks=10):
     return all_iters / n_checks
 
 
-# %%
 
 def draw_condition():
     n_vars = list(range(2, 6))

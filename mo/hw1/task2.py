@@ -29,7 +29,7 @@ def linear_search(f, x_cur, df_x):
     for i in range(0, len(df_x)):
         grad.append(df_x[i](*x_cur))
     alpha = 0.5
-    beta = 0.9
+    beta = 0.5
     stp = 1.0
     grad = np.array(grad)
     p = np.dot(grad, grad)
@@ -41,11 +41,11 @@ def linear_search(f, x_cur, df_x):
 
 #### 2.2 Реализация градиентного спуска:
 
-def inner(f, x, x_prime, lmd):
+def inner(f, x, x_evaluated_grd, lmd):
     args = []
     dim = len(x)
     for i in range(dim):
-        args.append(x[i] - lmd * x_prime[i](*x))
+        args.append(x[i] - lmd * x_evaluated_grd[i](*x))
     return f(*args)
 
 
@@ -61,20 +61,20 @@ def gradient_descention(f, *x, eps, max_iter_num, step_f):
     dim = len(x)
     symbol = symbol_mapper(dim)
 
-    x_prime = [lambdify(symbol, f(*symbol).diff(smb)) for smb in symbol]
+    x_evaluated_grd = [lambdify(symbol, f(*symbol).diff(smb)) for smb in symbol]
 
     x_cur = [*x]
     xs = [x_cur]
     iter_num = 0
     while True:
         if step_f is linear_search:
-            step = step_f(f, np.array(x_cur), x_prime)
+            step = step_f(f, np.array(x_cur), x_evaluated_grd)
         else:
-            step = step_f(lambda lmd: inner(f, x_cur, x_prime, lmd))
+            step = step_f(lambda lmd: inner(f, x_cur, x_evaluated_grd, lmd))
 
         x_next = [0] * dim
         for i in range(dim):
-            x_next[i] = x_cur[i] - step * x_prime[i](*x_cur)
+            x_next[i] = x_cur[i] - step * x_evaluated_grd[i](*x_cur)
         xs.append(x_next)
 
         if abs(f(*x_next) - f(*x_cur)) < eps or iter_num == max_iter_num:

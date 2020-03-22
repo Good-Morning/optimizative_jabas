@@ -46,7 +46,7 @@ def number_of_iters(cond, n_vars, step_chooser=t1.dichotomy, n_checks=10):
             x = np.array(args)
             return x.dot(A).dot(x) - b.dot(x)
 
-        _, iter_num = t2.gradient_descent(func, *init_x, eps=1e-3, max_iter_num=20,
+        _, iter_num = t2.gradient_descention(func, *init_x, eps=1e-3, max_iter_num=20,
                                           step_f=partial(t6.to_step_f, step_chooser))
 
         all_iters += iter_num

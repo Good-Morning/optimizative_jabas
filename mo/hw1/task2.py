@@ -17,19 +17,14 @@ def get_name(method):
     return method.__name__.replace('_', ' ').capitalize()
 
 
-# %% md
-
 ### 2. Реализуйте метод градиентного спуска и процедуру линейного поиска. Оцените, как меняется скорость сходимости, если для поиска величины шага использовать различные методы одномерного поиска.
 
-# %% md
 
 #### 2.1 Реализация процедуры линейного поиска:
 
-# %%
-
 # для минимизации альфы на к-ом шаге
 # т.е. условный наискорейший градиентный спуск
-def line_search(f, x_cur, df_x):
+def linear_search(f, x_cur, df_x):
     grad = []
     for i in range(0, len(df_x)):
         grad.append(df_x[i](*x_cur))
@@ -44,13 +39,9 @@ def line_search(f, x_cur, df_x):
     return stp
 
 
-# %% md
-
 #### 2.2 Реализация градиентного спуска:
 
-# %%
-
-def to_step_arg(f, x, x_prime, lmd):
+def inner(f, x, x_prime, lmd):
     args = []
     dim = len(x)
     for i in range(dim):
@@ -58,7 +49,7 @@ def to_step_arg(f, x, x_prime, lmd):
     return f(*args)
 
 
-def get_symbol(dim):
+def symbol_mapper(dim):
     return list(map(Symbol, {
         1: ['x'],
         2: ['x', 'y'],
@@ -66,9 +57,9 @@ def get_symbol(dim):
     }.get(dim, ['x' + str(i) for i in range(1, dim + 1)])))
 
 
-def gradient_descent(f, *x, eps, max_iter_num, step_f):
+def gradient_descention(f, *x, eps, max_iter_num, step_f):
     dim = len(x)
-    symbol = get_symbol(dim)
+    symbol = symbol_mapper(dim)
 
     x_prime = [lambdify(symbol, f(*symbol).diff(smb)) for smb in symbol]
 
@@ -76,10 +67,10 @@ def gradient_descent(f, *x, eps, max_iter_num, step_f):
     xs = [x_cur]
     iter_num = 0
     while True:
-        if step_f is line_search:
+        if step_f is linear_search:
             step = step_f(f, np.array(x_cur), x_prime)
         else:
-            step = step_f(lambda lmd: to_step_arg(f, x_cur, x_prime, lmd))
+            step = step_f(lambda lmd: inner(f, x_cur, x_prime, lmd))
 
         x_next = [0] * dim
         for i in range(dim):
@@ -91,5 +82,3 @@ def gradient_descent(f, *x, eps, max_iter_num, step_f):
 
         x_cur = x_next.copy()
         iter_num += 1
-
-

@@ -31,7 +31,7 @@ def to_step_f(one_dimensional_method, f):
     return a[-1]
 
 
-methods = t1.one_dimensional_methods + [t2.line_search]
+methods = t1.one_dimensional_methods + [t2.linear_search]
 
 
 def draw_contour(func):
@@ -56,8 +56,8 @@ def draw_contour(func):
     x0, y0 = [2, 5, 8, 11], [3, 5, 7, 9]
 
     for i, method in enumerate(methods):
-        step_f = partial(to_step_f, method) if method != t2.line_search else method
-        grad_pts, iter_num = t2.gradient_descent(func, x0[i], y0[i], eps=1e-5, max_iter_num=50, step_f=step_f)
+        step_f = partial(to_step_f, method) if method != t2.linear_search else method
+        grad_pts, iter_num = t2.gradient_descention(func, x0[i], y0[i], eps=1e-5, max_iter_num=50, step_f=step_f)
         x_grads, y_grads = grad_pts.T
         name = get_name(method)
         plt.plot(x_grads, y_grads, label=name)

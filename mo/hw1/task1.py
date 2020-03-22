@@ -160,3 +160,6 @@ def draw_interval_by_iteration_number():
         plt.legend()
         plt.show()
 
+
+if __name__ == "__main__":
+    print("AAA")
